@@ -17,6 +17,8 @@ dbname = os.getenv('DBNAME')
 
 fernetAPI = Fernet(s)
 
+vMsgRequestFormatError = 'Error request JSON format'
+
 def cekDec(txt):
     global xor_key
     res =''
@@ -35,6 +37,15 @@ def cek_json(text):
     except:
         print('error json convert')
         return 'error format'
+
+def myEncryptAPI(txt):
+    enc = fernetAPI.encrypt(txt.encode())
+    return enc.decode()
+
+def myDecryptAPI(txt):
+    dec = fernetAPI.decrypt(txt.encode())
+    return dec.decode()
+
     
 def connectDb():
     return psycopg2.connect(f"dbname={dbname} user={userDb} host={dbHost} password={passDb} port={dbPORT}")
