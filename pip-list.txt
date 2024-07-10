@@ -1,0 +1,6 @@
+flask-api-key-decorator
+python-dotenv
+psycopg2-binary
+cryptography
+flask
+aws-wsgi
