@@ -42,6 +42,7 @@ def cek():
 
 @app.route('/cek_status', methods=['POST'])
 @require_api_key(key=api_key)
+@jwt_required()
 def cek_status():
     return f_cek_status()
 

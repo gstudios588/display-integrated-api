@@ -1,7 +1,8 @@
 
 from flask import jsonify,request
 from module import *
-
+from flask_jwt_extended import *
+import datetime
 
 def f_login():
     jsRes =''
@@ -19,6 +20,18 @@ def f_login():
     curr = conn.cursor()
     curr.execute('select user_name, pass from ms_user where user_name = %s', [ user_name])
     dtUser = curr.fetchone()
+    if (dtUser == None): jsRes = {'status': 'NOK', 'msg': 'User atau password salah!'}
+
+    if (jsRes == ''):
+        passwdDecDB = myDecryptAPI(dtUser[1])
+        passwdDecRequest = myDecryptAPI(passwd)
+        print(passwdDecRequest, passwdDecDB)
+        if (passwdDecDB != passwdDecRequest): jsRes = {'status': 'NOK', 'msg': 'User atau password salah!'}
+
+    if (jsRes == ''):
+        token = create_access_token(identity=user_name, expires_delta= datetime.timedelta(days=1)) 
+        jsRes = {'status': 'OK', 'token': token}
+        # jsRes = myEncryptAPI(str(jsRes))
 
     conn.close()
-    return jsonify(dtUser)
+    return jsonify(jsRes)
